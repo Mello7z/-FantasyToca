@@ -30,3 +30,9 @@ https://fantasytoca.netlify.app/
 
 **Renan Emanoel**
 LinkedIn: https://www.linkedin.com/in/renan-emanoel-5237273b7/
+
+<img width="1536" height="1024" alt="Logo" src="https://github.com/user-attachments/assets/33ba38b2-f1e6-4f32-a950-538b4c2843dd" />
+
+<img width="1600" height="900" alt="Pagina Inicial" src="https://github.com/user-attachments/assets/57aadea6-eb5a-4536-bbb3-ac882fce6551" />
+
+<img width="1600" height="900" alt="Catalogo" src="https://github.com/user-attachments/assets/c2a64f79-0344-414f-8e1f-f64a67217bec" />
