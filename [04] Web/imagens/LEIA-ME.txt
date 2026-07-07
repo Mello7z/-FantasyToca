@@ -1,0 +1,15 @@
+📁 PASTA DE IMAGENS DO ACERVO DA FANTASYTOCA
+
+Você pode colocar todas as imagens das suas fantasias e roupas nesta pasta!
+
+Como usar no Painel de Administração (FestaSys):
+-------------------------------------------------
+1. Cole ou envie os seus arquivos de imagem (como .jpg, .png, .jpeg ou .webp) para dentro desta pasta 'imagens'.
+2. No formulário do Painel Administrativo, no campo "URL de Imagem (Capa)", digite o caminho relativo do arquivo.
+   Por exemplo:
+   imagens/minha_fantasia_nova.jpg
+
+Dicas:
+------
+- Certifique-se de que o nome do arquivo de imagem não tenha espaços ou acentos, pois isso facilita ao digitar.
+- Você também pode continuar usando links (URLs) completos da internet, se achar mais prático!

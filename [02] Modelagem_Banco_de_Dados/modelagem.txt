@@ -1,0 +1,61 @@
+========================================================================
+             MODELAGEM DE BANCO DE DADOS RELACIONAL - FANTASYTOCA
+========================================================================
+
+1. MODELO CONCEITUAL
+------------------------------------------------------------------------
+O banco de dados foi projetado para gerenciar o acervo de temas decorativos, fantasias associadas e itens de decoração do estoque da Fantasytoca.
+
+Entidades Identificadas:
+- TEMA: Representa o conjunto temático da festa (ex: Frozen, Batman, etc.) e tem um preço base de locação por dia.
+- FANTASIA: Trajes físicos disponíveis na loja. Cada fantasia pertence obrigatoriamente a um Tema principal.
+- ITEM_DECORACAO: Adereços e utensílios agregados para compor o cenário da festa temática.
+
+Relacionamentos:
+- Um TEMA possui de uma a muitas (1:N) FANTASIAS.
+  Dado um tema, podemos alugar diferentes trajes vinculados a ele.
+- Um TEMA possui um ou muitos (1:N) ITENS DE DECORAÇÃO.
+  Cada tema inclui um pacote de adereços de mesa específicos.
+
+
+2. MODELO LÓGICO DE TABELAS
+------------------------------------------------------------------------
+
+TABELA: tema
++-------------------------+-------------------------+-----------------------------------------+
+| Nome do Campo           | Tipo de Dado            | Restrições / Descrição                  |
++-------------------------+-------------------------+-----------------------------------------+
+| id_tema                 | INT                     | PRIMARY KEY, AUTO_INCREMENT             |
+| nome_tema               | VARCHAR(50)             | NOT NULL (Ex: 'Frozen', 'Batman')       |
+| descricao_tema          | VARCHAR(200)            | Descrição lúdica do tema                |
+| preco_aluguel           | DECIMAL(10,2)           | NOT NULL, Preço diário da locação       |
++-------------------------+-------------------------+-----------------------------------------+
+
+TABELA: fantasia
++-------------------------+-------------------------+-----------------------------------------+
+| Nome do Campo           | Tipo de Dado            | Restrições / Descrição                  |
++-------------------------+-------------------------+-----------------------------------------+
+| id_fantasia             | INT                     | PRIMARY KEY, AUTO_INCREMENT             |
+| nome_fantasia           | VARCHAR(100)            | NOT NULL, Nome do traje                 |
+| tamanho                 | VARCHAR(5)              | Grade de tamanho (P, M, G, GG, U)       |
+| id_tema                 | INT                     | FOREIGN KEY REFERENCES tema(id_tema)    |
+| disponivel              | BOOLEAN                 | Estado (TRUE = Disponível, FALSE = Alug)|
+| vezes_emprestada        | INT                     | Contador incremental de locações        |
++-------------------------+-------------------------+-----------------------------------------+
+
+TABELA: item_decoracao
++-------------------------+-------------------------+-----------------------------------------+
+| Nome do Campo           | Tipo de Dado            | Restrições / Descrição                  |
++-------------------------+-------------------------+-----------------------------------------+
+| id_item                 | INT                     | PRIMARY KEY, AUTO_INCREMENT             |
+| nome_item               | VARCHAR(100)            | NOT NULL, Nome do adereço               |
+| quantidade_estoque      | INT                     | NOT NULL, Quantidade em estoque         |
+| id_tema                 | INT                     | FOREIGN KEY REFERENCES tema(id_tema)    |
++-------------------------+-------------------------+-----------------------------------------+
+
+
+3. DUMP E VIEWS AUXILIARES
+------------------------------------------------------------------------
+O banco de dados possui views prontas para gerar insights rápidos de negócio:
+- v_fantasias_populares: Identifica as roupas com maior rotatividade (vezes_emprestada) para apoio em novos investimentos no acervo.
+- v_estoque_critico: Mostra quais itens de decoração possuem estoque abaixo de 10 unidades, auxiliando na reposição ágil de descartáveis pré-festa.

@@ -1,0 +1,18 @@
+========================================================================
+             RELATÓRIO DE CONCLUSÃO DO PROJETO - FANTASYTOCA
+========================================================================
+
+Este Projeto de Extensão Universitária em Desenvolvimento de Software alcançou com êxito os objetivos propostos tanto de cunho didático-profissionalizante quanto em sua face de utilidade comunitária concreta para a microempresa "Fantasytoca - Luzes e Magia Ltda.".
+
+Ao longo do desenvolvimento deste ecossistema composto por duas frentes de tecnologia articuladas (Website de Catálogos e Sistema FestaSys em Linguagem C), os seguintes marcos e aprendizados foram consolidados:
+
+1. Integração Multidisciplinar de Sistemas:
+   A capacidade de vincular conceitualmente um banco de dados relacional desenhado em conformidade às normas rígidas de integridade referencial com soluções práticas para o usuário final — seja pela atratividade e interatividade lúdica na Web (Fronteira Cliente) ou pela robustez e velocidade de processamento de variáveis na Área Staff (FestaSys).
+
+2. Benefício Real à Comunidade Local:
+   A informatização e representação do catálogo físico da Fantasytoca permitirá um aumento expressivo no agendamento e nas tratativas comerciais pelo WhatsApp. Com isso, os custos correntes de atendimento presencial manual diminuem e o acesso ao acervo de comemorações e folclore infantil é potencializado.
+
+3. Resiliência e Habilidade Técnica:
+   A aplicação dos conceitos de estrutura de dados complexas, formatação lógica condicional e proteção ativa contra falhas de estouro de buffer (tanto no formulário web quanto nas validações em Linguagem C) resultou em sistemas de excelente modularidade. Eles estão prontos para evoluções futuras no ecossistema (por exemplo, interligação direta via socket ou biblioteca ODBC do C para gravação persistente de queries SQL no servidor remoto).
+
+Conclui-se, portanto, que a vivência de extensão universitária cumpriu com louvor seu papel de aproximar a academia da prática do mercado, viabilizando soluções seguras, eficientes e de forte apelo visual para microempreendedores.

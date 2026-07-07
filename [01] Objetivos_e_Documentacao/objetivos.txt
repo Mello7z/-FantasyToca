@@ -1,0 +1,20 @@
+========================================================================
+             FANTASYTOCA - LUZES E MAGIA LTDA. (ESTALABECIDA EM 2018)
+          PROJETO DE EXTENSÃO: SISTEMA INTEGRADO DE GESTÃO E EXPOSIÇÃO
+========================================================================
+
+1. OBJETIVOS E VISÃO OPERACIONAL
+------------------------------------------------------------------------
+
+1.1 Descrição da Empresa:
+A "Fantasytoca - Luzes e Magia Ltda." é uma microempresa fundada em 2018, situada na Rua Alegre, nº 45, Bairro Jardim das Flores. A empresa atua no ramo de aluguel de fantasias infantis temáticas (Frozen, Batman, Safari, Unicórnio) e no fornecimento de kits completos de decoração de festas infantis sob demanda, incluindo adereços descartáveis (pratos, copos e toalhas temáticas). 
+
+Nossa missão é aproximar famílias e escolas do universo lúdico, garantindo diversão segura, fomento à imaginação infantil e excelente custo-benefício, sem a necessidade de aquisições caras de fantasias de uso único.
+
+1.2 Objetivos do Projeto:
+Este projeto de extensão visa conceber e desenvolver um ecossistema de software duplo para apoiar o crescimento da empresa Fantasytoca:
+- Plataforma Web Principal: Exposição interativa e atraente do catálogo de temas e fantasias, acompanhado de formulários funcionais de contato para os pais solicitarem orçamentos de forma ágil e intuitiva.
+- Sistema Administrativo FestaSys (C Desktop): Um terminal interno voltado exclusivamente à nossa equipe interna de atendimento para realizar o gerenciamento prático (cadastro, listagem, edição e exclusão) das decorações, fantasias e temas oferecidos.
+
+1.3 Impacto Social e Extensionista:
+Oferecer suporte tecnológico a uma microempresa local, transformando sua operação física em digital para aumentar seu alcance comunitário, otimizar custos de aquisição e estender as brincadeiras e magia a famílias de diferentes perfis socioeconômicos.

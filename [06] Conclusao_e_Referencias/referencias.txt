@@ -1,0 +1,15 @@
+========================================================================
+             REFERÊNCIAS BIBLIOGRÁFICAS E TECNOLÓGICAS DO PROJETO
+========================================================================
+
+1. COELHO, Eduardo de Oliveira. "Linguagem C: Estruturas, ponteiros e algoritmos avançados de programação". Editora Universitária, 2021.
+
+2. ELMASRI, Ramez; NAVATHE, Shamkant B. "Sistemas de Banco de Dados". 7. ed. Pearson: São Paulo, 2018.
+
+3. FLANAGAN, David. "JavaScript: O Guia Definitivo". 7. ed. Porto Alegre: Bookman, 2021.
+
+4. W3SCHOOLS. "HTML5, CSS & JavaScript Fundamentals for Responsive Web Design". Disponível em: <https://www.w3schools.com>. Acesso em: Maio de 2026.
+
+5. TAILWIND DESIGN TEAM. "Tailwind CSS - Rapidly build modern websites without ever leaving your HTML". Disponível em: <https://tailwindcss.com>. Acesso em: Maio de 2026.
+
+6. MYSQL GROUP. "MySQL Reference Manual & ANSI SQL Design Guidelines". Oracle Corporation, 2025. Disponível em: <https://dev.mysql.com/doc>. Acesso em: Maio de 2026.

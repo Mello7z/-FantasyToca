@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Fantasytoca - Festas Inesquecíveis</title>
+    
+    <!-- Definição precoce de tratarErroImagem para evitar erros de referência não definidos durante o carregamento das imagens -->
+    <script>
+        window.tratarErroImagem = function(img) {
+            if (!img) return;
+            img.onerror = null; // Evita loops de erro
+            img.setAttribute('data-fallback-pending', 'true');
+        };
+    </script>
+    
+    <!-- Fontes e Ícones Premium do Lucide -->
+    <link href="https://fonts.googleapis.com" rel="preconnect"/>
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <!-- Carregamento do Tailwind CSS via CDN -->
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script>
+        tailwind.config = {
+          theme: {
+            extend: {
+              colors: {
+                brand: {
+                  pink: '#000000',
+                  purple: '#000000',
+                  dark: '#1a1a1a',
+                  light: '#f8f9fa'
+                }
+              },
+              fontFamily: {
+                sans: ['Plus Jakarta Sans', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+                display: ['Plus Jakarta Sans', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+              }
+            }
+          }
+        }
+    </script>
+    <style>
+        body {
+          font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+        @keyframes fadeIn {
+          from { opacity: 0; transform: translateY(8px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in {
+          animation: fadeIn 0.4s ease-out forwards;
+        }
+        
+        /* Estilos customizados para os botões de filtro de categoria ativos */
+        .categoria-btn.active {
+            background-color: #000000;
+            color: white;
+            border-color: #000000;
+            box-shadow: 2px 2px 0px 0px rgba(0,0,0,1);
+        }
+        
+        /* Opções de tamanho no modal de detalhes */
+        .tamanho-btn {
+            border: 1px solid #1a1a1a;
+            padding: 6px 12px;
+            font-size: 11px;
+            font-weight: 700;
+            border-radius: 9999px;
+            background-color: white;
+            color: #1a1a1a;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .tamanho-btn:hover {
+            background-color: #f8f9fa;
+        }
+        .tamanho-btn.active {
+            background-color: #9b59b6;
+            color: white;
+            border-color: #9b59b6;
+        }
+    </style>
+</head>
+<body class="bg-white text-black antialiased selection:bg-brand-pink selection:text-white">
+
+    <!-- Widget do Sistema de Notificação Flutuante (Toast) -->
+    <div id="toast-aviso" class="fixed top-6 left-1/2 -translate-x-1/2 z-50 bg-brand-dark text-white border border-black px-6 py-3 rounded-full text-xs font-semibold shadow-lg flex items-center gap-2 transform -translate-y-6 opacity-0 transition-all duration-300" style="display: none;">
+        <i data-lucide="sparkles" class="w-4 h-4 text-brand-pink shrink-0"></i>
+        <span id="toast-mensagem">Toast mensagem</span>
+    </div>
+
+    <!-- INÍCIO: Barra de Navegação (NavigationBar) -->
+    <nav class="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-black shadow-sm" data-purpose="main-nav" id="fantasytoca-sticky-nav">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16 sm:h-20">
+                <!-- Logotipo da Marca -->
+                <a href="index.html" class="flex-shrink-0 flex items-center group relative h-full w-44 sm:w-56 md:w-64">
+                    <img alt="Fantasytoca" class="h-24 sm:h-32 md:h-36 lg:h-38 w-auto max-w-none object-contain transition-all duration-300 transform group-hover:scale-105 absolute top-1/2 -translate-y-1/2 left-0" src="imagens/Logo.png" onerror="this.src='https://lh3.googleusercontent.com/aida/ADBb0uhmTUFLI4cmZoRMZBduuSkZSEYO9cDd8QQGWanFIwZN2n4isdDNJoHhbitVVaKmnxsls89pS-ey1yRF1ESVXLzFF7zGwR3wlr2l4CH7Fk0a6Bj_sfk822uKiai9oTZTIVLnUfdZ1ezwPoiezmToDceXpg-mH72w_4HZD8hAt7V3ysaNpuDsvZbrQx2XXDQ3loLXwwOuUzn51kfIoWsCrW4aSe2HJY3p-BIhUg_kszkzpvmE3zNs-UHf'"/>
+                </a>
+                
+                <!-- Links de Navegação para Desktop -->
+                <div class="hidden md:flex items-center space-x-8 text-sm">
+                    <a class="text-black font-semibold hover:text-brand-pink transition-colors" href="index.html">Início</a>
+                    <a class="text-gray-800 font-semibold hover:text-brand-pink transition-colors" href="#sobre">Sobre</a>
+                    <a class="text-gray-800 font-semibold hover:text-brand-pink transition-colors" href="#catalogo-secao">Fantasias</a>
+                    <a class="text-gray-800 font-semibold hover:text-brand-pink transition-colors" href="#contato">Contato</a>
+                    <a class="text-gray-500 font-semibold hover:text-brand-pink transition-colors flex items-center gap-1" href="login.html">
+                        <i data-lucide="shield-alert" class="w-4 h-4 text-black shrink-0"></i>
+                        <span>Painel Staff</span>
+                    </a>
+                </div>
+                
+                <!-- Botão de Ação (CTA) e Alternador de Menu para Celular -->
+                <div class="flex items-center gap-4">
+                    <a class="hidden sm:inline-flex items-center justify-center px-6 py-2.5 border border-transparent rounded-full shadow-sm text-sm font-semibold text-white bg-black hover:bg-gray-900 transition-all transform hover:scale-105" href="#catalogo-secao">
+                        Ver Catálogo
+                    </a>
+                    
+                    <!-- Botão para Menu Móvel (Hambúrguer) -->
+                    <div class="-mr-2 flex md:hidden">
+                        <button id="mobile-hamburger-btn" class="inline-flex items-center justify-center p-2 rounded-md text-black hover:text-brand-pink hover:bg-gray-100 focus:outline-none" type="button">
+                            <span class="sr-only">Abrir menu principal</span>
+                            <i data-lucide="menu" id="hamburger-icon" class="h-6 w-6"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Menu Dropdown para Celular -->
+        <div id="mobile-dropdown-menu" class="hidden md:hidden bg-white border-t border-black text-sm font-semibold text-gray-800">
+            <div class="px-4 py-3 flex flex-col gap-3">
+                <a href="index.html" class="py-2 hover:text-brand-pink transition-all">Início</a>
+                <a href="#sobre" class="py-2 hover:text-brand-pink transition-all">Sobre</a>
+                <a href="#catalogo-secao" class="py-2 hover:text-brand-pink transition-all">Fantasias</a>
+                <a href="#contato" class="py-2 hover:text-brand-pink transition-all">Contato</a>
+                <a href="login.html" class="py-2 text-black hover:text-brand-pink flex items-center gap-1.5 transition-all">
+                    <i data-lucide="shield-alert" class="w-4 h-4"></i>
+                    <span>Painel Staff Administrativo</span>
+                </a>
+            </div>
+        </div>
+    </nav>
+    <!-- FIM: Barra de Navegação (NavigationBar) -->
+
+    <main class="flex-grow">
+        
+        <!-- INÍCIO: Seção Principal (HeroSection) -->
+        <section class="relative bg-white border-b border-black" data-purpose="hero" id="hero-banner">
+            <div class="absolute inset-0">
+                <img alt="Interior da loja Fantasytoca" class="w-full h-full object-cover opacity-60" src="imagens/Loja.png"/>
+                <div class="absolute inset-0 bg-white/40 mix-blend-overlay"></div>
+            </div>
+            
+            <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 sm:py-32 lg:py-40 flex flex-col justify-center items-start min-h-[75vh]">
+                <div class="max-w-2xl bg-white/95 backdrop-blur-md p-8 sm:p-12 rounded-3xl border border-black shadow-md animate-fade-in text-left">
+                    <h1 class="text-3xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-black drop-shadow-sm leading-tight">
+                        <span class="block">Festas Inesquecíveis</span>
+                        <span class="block text-brand-pink mt-2">Começam Aqui! 🎉</span>
+                    </h1>
+                    
+                    <p class="mt-6 text-base sm:text-lg text-gray-800 font-medium leading-relaxed">
+                        Transformamos sonhos de infância em realidade com kits de decorações temáticas encantadoras e figurinos mágicos. Com o nosso acervo premium higienizado sob luz UV-C, a diversão é 100% garantida!
+                    </p>
+                    
+                    <div class="mt-8 flex flex-col sm:flex-row gap-4">
+                        <a class="inline-flex items-center justify-center px-8 py-3.5 border border-transparent text-sm font-semibold rounded-full text-white bg-black hover:bg-gray-900 shadow-sm transform transition hover:-translate-y-0.5" href="#catalogo-secao">
+                            Ver Catálogo de Temas
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- FIM: Seção Principal (HeroSection) -->
+
+        <!-- INÍCIO: Seção Sobre Nós (AboutSection) -->
+        <section class="py-20 bg-white overflow-hidden relative border-b border-black" data-purpose="about" id="sobre">
+            <div class="absolute top-0 right-0 -mr-20 -mt-20 w-64 h-64 rounded-full bg-brand-pink/5 blur-3xl"></div>
+            <div class="absolute bottom-0 left-0 -ml-20 -mb-20 w-80 h-80 rounded-full bg-brand-pink/5 blur-3xl"></div>
+            
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+                <div class="lg:grid lg:grid-cols-2 lg:gap-16 items-center">
+                    <div class="mb-12 lg:mb-0 space-y-6">
+                        <span class="text-base text-brand-pink font-semibold tracking-wide uppercase">Quem Somos</span>
+                        <h2 class="text-3xl sm:text-4xl leading-10 font-extrabold tracking-tight text-black">
+                            Sobre a Fantasytoca
+                        </h2>
+                        
+                        <div class="text-base text-gray-700 space-y-4 leading-relaxed">
+                            <p>
+                                A <strong>Fantasytoca - Luzes e Magia Ltda.</strong> nasceu do desejo de tornar cada celebração um momento lúdico, mágico e impecável. Situados no endereço <strong>Rua Alegre, nº 45, no Bairro Jardim das Flores</strong>, somos uma equipe dedicada ao aluguel de fantasias infantis e artigos de eventos com carinho corporativo.
+                            </p>
+                            <p>
+                                Nosso grande diferencial científico é o cuidado de saúde: todos os figurinos e acessórios de luxo são rigorosamente higienizados com sabão de coco neutro e esterilizados com lâmpadas especiais de ozônio e <strong>luz ultravioleta profunda (UV-C)</strong> antes de serem liberados no catálogo.
+                            </p>
+                            <p>
+                                Fornecemos combos e kits de decorações temáticas fáceis de montar que transformam aniversários, festas escolares e ocasiões lúdicas em cenários de contos de fadas inesquecíveis.
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <div class="relative rounded-2xl overflow-hidden border border-black shadow-md group">
+                        <div class="absolute inset-0 bg-black mix-blend-overlay opacity-10 group-hover:opacity-0 transition-opacity duration-500 z-10"></div>
+                        <img alt="Interior da Fantasytoca mostrando showroom de fantasias" class="w-full h-auto object-cover transform group-hover:scale-102 transition-transform duration-700 ease-in-out" src="imagens/Loja.png"/>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- FIM: Seção Sobre Nós (AboutSection) -->
+
+        <!-- INÍCIO: Seção de Temas Populares com Filtros e Estoque em Tempo Real -->
+        <section class="py-20 bg-brand-light border-b border-black" data-purpose="catalog" id="catalogo-secao">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                
+                <div class="text-center max-w-3xl mx-auto mb-12 space-y-3">
+                    <h2 class="text-3xl font-extrabold text-black sm:text-4xl tracking-tight">
+                        Nossos Temas Mais Populares
+                    </h2>
+                    <p class="text-base text-gray-700">
+                        Escolha a aventura mágica ideal para o aniversário de seu pequeno e verifique a disponibilidade em tempo real!
+                    </p>
+                </div>
+
+                <!-- Segmento do Sistema Informativo e de Filtros Interativos -->
+                <div id="catalog-controls" class="bg-white p-4 rounded-2xl border border-black flex flex-col md:flex-row gap-4 items-stretch md:items-center justify-between mb-8 shadow-sm">
+                    
+                    <!-- Barra de busca instantânea por palavras-chave -->
+                    <div class="relative flex-1 max-w-md">
+                        <i data-lucide="search" class="w-4 h-4 text-gray-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none"></i>
+                        <input
+                            type="text"
+                            id="busca-input"
+                            placeholder="Buscar por Frozen, Elsa, Safári, Heróis..."
+                            class="w-full h-11 pl-10 pr-4 bg-gray-50 border border-black rounded-xl text-xs font-semibold text-gray-700 placeholder:text-gray-400 focus:ring-2 focus:ring-black outline-none transition-shadow"
+                        />
+                    </div>
+
+                    <!-- Contêiner de tags para filtro de categorias -->
+                    <div class="flex flex-wrap gap-1.5" id="categoria-botoes-recip">
+                        <button class="categoria-btn px-4 py-1.5 rounded-lg text-xs font-bold transition-all bg-white text-black border-2 border-black shadow-sm cursor-pointer" data-categoria="Todos">Todos</button>
+                        <button class="categoria-btn px-4 py-1.5 border border-gray-200 rounded-lg text-xs font-bold transition-all bg-white hover:bg-gray-100 text-gray-650 cursor-pointer" data-categoria="Princesas">Princesas</button>
+                        <button class="categoria-btn px-4 py-1.5 border border-gray-200 rounded-lg text-xs font-bold transition-all bg-white hover:bg-gray-100 text-gray-650 cursor-pointer" data-categoria="Heróis">Heróis</button>
+                        <button class="categoria-btn px-4 py-1.5 border border-gray-200 rounded-lg text-xs font-bold transition-all bg-white hover:bg-gray-100 text-gray-650 cursor-pointer" data-categoria="Aventura">Aventura</button>
+                        <button class="categoria-btn px-4 py-1.5 border border-gray-200 rounded-lg text-xs font-bold transition-all bg-white hover:bg-gray-100 text-gray-650 cursor-pointer" data-categoria="Fantasia">Fantasia</button>
+                    </div>
+
+                    <!-- Menu Suspenso (Dropdown) para Ordenação em Tempo Real -->
+                    <div id="sorting-controllers" class="flex items-center gap-2 shrink-0">
+                        <i data-lucide="sliders-horizontal" class="w-4 h-4 text-black"></i>
+                        <select
+                            id="ordenar-select"
+                            class="text-xs font-bold bg-white border border-black rounded-xl px-3 py-2 text-black outline-none cursor-pointer focus:ring-2 focus:ring-black"
+                        >
+                            <option value="default">Ordenar: Padrão</option>
+                            <option value="preco-asc">Menor Preço</option>
+                            <option value="preco-desc">Maior Preço</option>
+                        </select>
+                    </div>
+
+                </div>
+
+                <!-- Grade reativa populada dinamicamente via script.js -->
+                <div id="grid-temas" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+                    <!-- Populada automaticamente ao carregar o DOM -->
+                </div>
+
+            </div>
+        </section>
+        <!-- FIM: Seção de Temas Populares -->
+
+        <!-- INÍCIO: Seção de Contato (ContactSection) -->
+        <section class="py-24 bg-white border-b border-black" data-purpose="contact-form" id="contato">
+            <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="bg-white rounded-3xl shadow-sm border border-black p-8 sm:p-12 space-y-8">
+                    
+                    <div class="text-center mb-6 space-y-2">
+                        <h2 class="text-3xl font-extrabold text-black tracking-tight font-display">Fale Conosco</h2>
+                        <p class="text-gray-500 text-sm max-w-lg mx-auto">
+                            Pronto para começar a planejar? Envie-nos uma proposta no WhatsApp e registre no FestaSys em poucos segundos!
+                        </p>
+                    </div>
+                    
+                    <form id="form-contato-inline" class="space-y-6">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                            <div class="space-y-1.5">
+                                <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider text-left" for="contato-nome">Nome Completo</label>
+                                <input class="block w-full rounded-xl border border-black shadow-sm focus:border-black focus:ring-black sm:text-xs px-4 py-3 bg-white text-black outline-none transition-all placeholder:text-gray-300" id="contato-nome" placeholder="João Silva" required type="text"/>
+                            </div>
+                            <div class="space-y-1.5">
+                                <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider text-left" for="contato-whatsapp">WhatsApp</label>
+                                <input class="block w-full rounded-xl border border-black shadow-sm focus:border-black focus:ring-black sm:text-xs px-4 py-3 bg-white text-black outline-none transition-all placeholder:text-gray-300" id="contato-whatsapp" placeholder="(11) 99999-9999" required type="tel"/>
+                            </div>
+                        </div>
+                        
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                            <div class="space-y-1.5">
+                                <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider text-left" for="contato-data">Data da Festa (Previsão)</label>
+                                <input class="block w-full rounded-xl border border-black shadow-sm focus:border-black focus:ring-black sm:text-xs px-4 py-3 bg-white text-black outline-none transition-all" id="contato-data" required type="date"/>
+                            </div>
+                            <div class="space-y-1.5">
+                                <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider text-left" for="contato-combo">Combo de Interesse</label>
+                                <select class="block w-full rounded-xl border border-black shadow-sm focus:border-black focus:ring-black sm:text-xs px-4 py-3 bg-white text-black cursor-pointer outline-none transition-all" id="contato-combo" required>
+                                    <option value="Combo Completo: Kit Decoração + Fantasia">Combo Completo (Kit Decoração + Fantasia)</option>
+                                    <option value="Apenas Aluguel de Fantasias Temáticas">Apenas Aluguel de Fantasias Temáticas</option>
+                                    <option value="Apenas Kit de Decoração da Mesa">Apenas Kit de Decoração de Mesa</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="space-y-1.5">
+                            <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider text-left" for="contato-fantasia">Peça de Interesse (Opcional)</label>
+                            <select class="block w-full rounded-xl border border-black shadow-sm focus:ring-2 focus:ring-black focus:border-black sm:text-xs px-4 py-3 bg-white text-black cursor-pointer outline-none transition-all" id="contato-fantasia">
+                                <!-- Populado dinamicamente via script.js -->
+                            </select>
+                        </div>
+
+                        <div class="space-y-1.5">
+                            <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider text-left" for="contato-mensagem">Observações Especiais (Mencionadas no WhatsApp)</label>
+                            <textarea class="block w-full rounded-xl border border-black shadow-sm focus:ring-2 focus:ring-black focus:border-black sm:text-xs px-4 py-3 bg-white text-black outline-none transition-all placeholder:text-gray-300" id="contato-mensagem" placeholder="Gostaria de saber mais sobre a disponibilidade de tamanhos extras e decorações para o tema..." required rows="4"></textarea>
+                        </div>
+                        
+                        <div class="pt-4">
+                            <button class="w-full flex justify-center py-3.5 px-4 rounded-xl shadow-sm text-xs font-bold text-black bg-white hover:bg-gray-50 border-2 border-black focus:outline-none focus:ring-2 focus:ring-black focus:ring-offset-2 transition-all cursor-pointer transform active:scale-98" type="submit">
+                                Enviar Mensagem para o WhatsApp & Confirmar Orçamento
+                            </button>
+                        </div>
+                    </form>
+                    
+                </div>
+            </div>
+        </section>
+        <!-- FIM: Seção de Contato -->
+
+        <!-- INÍCIO: Seção de Área Restrita / Staff -->
+        <section class="py-20 bg-brand-light border-b border-black" data-purpose="staff-login" id="staff">
+            <div class="max-w-md mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-6">
+                <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-white shadow-sm border border-black text-gray-400">
+                    <svg class="w-8 h-8 text-black" fill="none" stroke="currentColor" stroke-width="1.5" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" stroke-linecap="round" stroke-linejoin="round"></path>
+                    </svg>
+                </div>
+                
+                <h2 class="text-2xl font-bold text-black font-display">Área Restrita do Staff</h2>
+                <p class="text-xs text-gray-500 leading-relaxed max-w-sm mx-auto">
+                    Acesso exclusivo para professores, alunos voluntários e funcionários cadastrados consultarem o estoque lúdico e gerenciarem o feedback físico de roupas.
+                </p>
+                
+                <a href="login.html" class="inline-flex items-center px-8 py-3.5 border border-black shadow-sm text-xs font-bold rounded-xl text-gray-700 bg-white hover:bg-gray-50 transition-all cursor-pointer transform active:scale-95">
+                    Acessar Painel Integrado (FestaSys)
+                </a>
+            </div>
+        </section>
+        <!-- FIM: Seção de Área Restrita / Staff -->
+
+    </main>
+
+    <!-- --- MODAL DE DETALHES REUTILIZÁVEL --- -->
+    <div id="detalhes-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 overflow-hidden" style="display: none;">
+        <!-- Gatilho de Fechamento por Toque no Fundo -->
+        <div class="absolute inset-0 bg-transparent" id="modal-backdrop-close"></div>
+
+        <div class="relative w-full max-w-4xl bg-white rounded-3xl shadow-2xl overflow-hidden z-10 max-h-[92vh] flex flex-col md:flex-row border border-black animate-fade-in">
+            
+            <!-- Botão para fechar o Modal -->
+            <button id="fechar-modal-btn" class="absolute top-4 right-4 z-20 bg-white border border-black hover:bg-gray-100 text-black p-2 rounded-full transition-colors active:scale-90 shadow-sm cursor-pointer">
+                <i data-lucide="x" class="w-5 h-5"></i>
+            </button>
+
+            <!-- Segmento de Imagem Esquerdo -->
+            <div class="w-full md:w-1/2 bg-gray-50 relative min-h-[260px] md:min-h-[460px]">
+                <img id="modal-img" src="" alt="Tema Selecionado" onerror="tratarErroImagem(this)" class="w-full h-full object-cover object-top">
+                <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent pointer-events-none text-white"></div>
+                <div class="absolute bottom-6 left-6 right-6 text-white text-left">
+                    <span id="modal-categoria" class="inline-block bg-white/20 text-white text-[10px] font-bold uppercase tracking-wider px-3 py-1 rounded-lg mb-2">PRINCESAS</span>
+                    <h3 id="modal-titulo" class="font-display text-2xl font-bold tracking-tight mb-1 text-white">Aventura Congelante</h3>
+                    <div class="flex items-center gap-1.5">
+                        <span id="modal-status-dot" class="w-2.5 h-2.5 rounded-full bg-emerald-400"></span>
+                        <span id="modal-status" class="text-sm font-semibold text-white">Disponível</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Painel de Detalhes de Conteúdo Direito -->
+            <div class="w-full md:w-1/2 p-6 md:p-8 overflow-y-auto flex flex-col justify-between max-h-[60vh] md:max-h-[92vh] text-left">
+                <div class="space-y-5">
+                    
+                    <div class="flex justify-between items-baseline pb-3 border-b border-black">
+                        <div class="text-gray-500 font-bold font-display text-xs tracking-wider uppercase">Fantasytoca Premium</div>
+                        <div class="text-black font-extrabold text-2xl">
+                            <span id="modal-preco" class="text-black block md:inline">R$ 120,00</span>
+                            <span class="text-xs text-gray-400 font-normal">/ diária</span>
+                        </div>
+                    </div>
+
+                    <p id="modal-descricao" class="text-gray-700 text-xs md:text-sm leading-relaxed">
+                        Inspirada nos contos de fadas das rainhas do gelo, esta luxuosa fantasia traz toda a delicadeza do algodão...
+                    </p>
+
+                    <!-- Listagem para Seleção de Tamanhos -->
+                    <div class="space-y-2">
+                        <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider">
+                            Grade de Tamanhos Disponíveis de Ateliê:
+                        </label>
+                        <div class="flex flex-wrap gap-2" id="tamanhos-container">
+                            <!-- Populado dinamicamente via script.js -->
+                        </div>
+                    </div>
+
+                    <!-- Acessórios do Vestuário -->
+                    <div class="space-y-2">
+                        <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider">Acessórios Inclusos Sem Custo Extra:</label>
+                        <ul id="modal-acessorios" class="text-xs space-y-1.5 text-gray-600 font-semibold list-none">
+                            <!-- Populado com marcadores de ícones dinamicamente -->
+                        </ul>
+                    </div>
+
+                    <!-- Etiquetas de Higiene Clínica e Segurança -->
+                    <div class="grid grid-cols-2 gap-4 border-t border-black pt-4">
+                        <div>
+                            <span class="text-[9px] font-bold text-gray-400 uppercase tracking-wider block">Material Principal</span>
+                            <span id="modal-material" class="text-xs text-black font-semibold leading-tight">Algodão Nobre e Antialérgico</span>
+                        </div>
+                        <div>
+                            <span class="text-[9px] font-bold text-gray-400 uppercase tracking-wider block">Higiene Estrita</span>
+                            <span class="text-xs text-emerald-600 font-bold flex items-center gap-1 mt-0.5">
+                                <i data-lucide="shield-check" class="w-3.5 h-3.5 text-emerald-600 shrink-0"></i> Esterilização UV-C
+                            </span>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Botão de Ação para Enviar Solicitação -->
+                <button id="modal-alugar-btn" class="w-full bg-white hover:bg-gray-50 text-black border-2 border-black font-bold py-3.5 rounded-xl transition-all font-sans text-xs flex items-center justify-center gap-2 shadow-sm mt-6 cursor-pointer transform active:scale-98">
+                    <i data-lucide="shopping-bag" class="w-4 h-4 text-black"></i>
+                    <span>Preencher Proposta de Reserva</span>
+                </button>
+                
+            </div>
+            
+        </div>
+    </div>
+
+    <!-- INÍCIO: Rodapé (Footer) -->
+    <footer class="bg-white border-t border-black pt-16 pb-8" data-purpose="site-footer">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col items-center text-center">
+            
+            <div class="w-full flex items-center justify-center mb-6 px-4">
+                <img alt="Fantasytoca Logo" class="h-28 sm:h-36 md:h-44 lg:h-48 w-auto object-contain transition-all duration-300 transform hover:scale-[1.03]" src="imagens/Logo.png" onerror="this.src='https://lh3.googleusercontent.com/aida/ADBb0uhmTUFLI4cmZoRMZBduuSkZSEYO9cDd8QQGWanFIwZN2n4isdDNJoHhbitVVaKmnxsls89pS-ey1yRF1ESVXLzFF7zGwR3wlr2l4CH7Fk0a6Bj_sfk822uKiai9oTZTIVLnUfdZ1ezwPoiezmToDceXpg-mH72w_4HZD8hAt7V3ysaNpuDsvZbrQx2XXDQ3loLXwwOuUzn51kfIoWsCrW4aSe2HJY3p-BIhUg_kszkzpvmE3zNs-UHf'"/>
+            </div>
+            
+            <div class="flex flex-wrap justify-center gap-6 mb-8 text-sm font-bold text-black">
+                <a class="hover:text-brand-pink transition-colors" href="#sobre">Sobre a Loja</a>
+                <a class="hover:text-brand-pink transition-colors" href="#catalogo-secao">Catálogo</a>
+                <a class="hover:text-brand-pink transition-colors" href="contato.html">Formulário de Orçamento</a>
+                <a class="hover:text-brand-pink transition-colors" href="#sobre">Políticas de Uso</a>
+            </div>
+            
+            <p class="text-sm text-gray-650 max-w-2xl leading-relaxed font-medium">
+                © 2026 Fantasytoca Aluguel. Projeto Beta 1.0 de controle operacional e de consultas de fantasias de festa de alta fidelidade técnica. Localizada na Rua Alegre, 45 - Bairro Jardim das Flores. Todos os direitos reservados.
+            </p>
+            
+        </div>
+    </footer>
+    <!-- FIM: Rodapé (Footer) -->
+
+    <!-- Integração dos Arquivos de Script -->
+    <script src="script.js"></script>
+    <script>
+        // Init Lucide Icons
+        document.addEventListener("DOMContentLoaded", function() {
+            lucide.createIcons();
+            
+            // Mobile Menu responsive control
+            const btn = document.getElementById("mobile-hamburger-btn");
+            const menu = document.getElementById("mobile-dropdown-menu");
+            if (btn && menu) {
+                btn.addEventListener("click", () => {
+                    menu.classList.toggle("hidden");
+                });
+            }
+            
+            // Inline contact form listeners hook-up for seamless synchronization
+            const formInline = document.getElementById("form-contato-inline");
+            if (formInline) {
+                // Populate inline select option
+                const dropdownFantasia = document.getElementById("contato-fantasia");
+                if (dropdownFantasia) {
+                    dropdownFantasia.innerHTML = '<option value="">-- Quero escolher meu tema de preferibilidade --</option>';
+                    const costumesList = obterCostumes();
+                    costumesList.forEach(item => {
+                        const opt = document.createElement("option");
+                        opt.value = item.id;
+                        opt.textContent = `${item.name} (${item.category}) - R$ ${item.price.toFixed(2)}/dia`;
+                        dropdownFantasia.appendChild(opt);
+                    });
+                }
+                
+                formInline.addEventListener("submit", function(ev) {
+                    ev.preventDefault();
+                    
+                    const nomeVal = document.getElementById("contato-nome").value.trim();
+                    const whatsappVal = document.getElementById("contato-whatsapp").value.trim();
+                    const dataVal = document.getElementById("contato-data").value;
+                    const comboVal = document.getElementById("contato-combo").value;
+                    const msgVal = document.getElementById("contato-mensagem").value.trim();
+                    const selectFantasiaVal = document.getElementById("contato-fantasia").value;
+                    
+                    let finalCostumeId = "";
+                    let finalCostumeName = "Sem Traje Vinculado";
+                    if (selectFantasiaVal) {
+                        const item = obterCostumes().find(c => c.id === selectFantasiaVal);
+                        if (item) {
+                            finalCostumeId = item.id;
+                            finalCostumeName = item.name;
+                        }
+                    }
+                    
+                    const novoIdSeq = `INQ-${Math.floor(1000 + Math.random() * 9000)}`;
+                    const novaInq = {
+                        id: novoIdSeq,
+                        name: nomeVal,
+                        whatsapp: whatsappVal,
+                        date: dataVal,
+                        combo: comboVal,
+                        costumeId: finalCostumeId,
+                        costumeName: finalCostumeName,
+                        status: 'Pendente',
+                        notes: msgVal
+                    };
+                    
+                    const inquiries = obterInquiries();
+                    inquiries.unshift(novaInq);
+                    salvarInquiries(inquiries);
+                    
+                    let msgZap = `Olá Fantasytoca! Meu nome é ${nomeVal}.\nGostaria de solicitar orçamento para a data ${dataVal}.\n\n`;
+                    msgZap += `* Combo Selecionado: ${comboVal}\n`;
+                    msgZap += `* Tema de Interesse: ${finalCostumeName}\n`;
+                    if (msgVal) {
+                        msgZap += `* Detalhes Adicionais: ${msgVal}\n`;
+                    }
+                    msgZap += `\n*Código da Consulta: ${novoIdSeq}*`;
+                    
+                    alert(`Sua proposta (#${novoIdSeq}) foi enviada no banco de dados e salva com sucesso para a nossa equipe do FestaSys!\n\nAgora você será redirecionado para enviar a mensagem simulada no WhatsApp.`);
+                    window.open(`https://wa.me/5511999991234?text=${encodeURIComponent(msgZap)}`, '_blank');
+                    formInline.reset();
+                    
+                    const toast = document.getElementById("toast-aviso");
+                    const texto = document.getElementById("toast-mensagem");
+                    if (toast && texto) {
+                        texto.textContent = `Proposta #${novoIdSeq} registrada no FestaSys com sucesso!`;
+                        toast.style.display = "flex";
+                        toast.classList.remove("opacity-0", "-translate-y-6");
+                        toast.classList.add("opacity-100", "translate-y-0");
+                        setTimeout(() => {
+                            toast.classList.remove("opacity-100", "translate-y-0");
+                            toast.classList.add("opacity-0", "-translate-y-6");
+                        }, 4000);
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>

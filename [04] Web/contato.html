@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Solicitação de Orçamento - Fantasytoca</title>
+    
+    <!-- Fontes e Ícones Premium do Lucide -->
+    <link href="https://fonts.googleapis.com" rel="preconnect"/>
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <!-- Carregamento do Tailwind CSS via CDN -->
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script>
+        tailwind.config = {
+          theme: {
+            extend: {
+              colors: {
+                brand: {
+                  pink: '#000000',
+                  purple: '#000000',
+                  dark: '#1a1a1a',
+                  light: '#f8f9fa'
+                }
+              },
+              fontFamily: {
+                sans: ['Plus Jakarta Sans', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+                display: ['Plus Jakarta Sans', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+              }
+            }
+          }
+        }
+    </script>
+    <style>
+        body {
+          font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+    </style>
+</head>
+<body class="bg-brand-light text-black antialiased selection:bg-brand-pink selection:text-white">
+
+    <!-- Widget do Sistema de Notificação Flutuante (Toast) -->
+    <div id="toast-aviso" class="fixed top-6 left-1/2 -translate-x-1/2 z-50 bg-brand-dark text-white border border-black px-6 py-3 rounded-full text-xs font-semibold shadow-lg flex items-center gap-2 transform -translate-y-6 opacity-0 transition-all duration-300" style="display: none;">
+        <i data-lucide="sparkles" class="w-4 h-4 text-brand-pink shrink-0"></i>
+        <span id="toast-mensagem">Toast mensagem</span>
+    </div>
+
+    <!-- --- CABEÇALHO DE NAVEGAÇÃO SUPERIOR --- -->
+    <nav class="bg-white/95 backdrop-blur-md shadow-sm w-full top-0 sticky z-40 transition-all border-b border-black">
+        <div class="flex justify-between items-center px-6 md:px-12 h-16 sm:h-20 max-w-7xl mx-auto">
+            <!-- Logotipo Principal da Marca -->
+            <a href="index.html" class="flex items-center group relative h-full w-44 sm:w-56 md:w-64">
+                <img alt="Fantasytoca" class="h-24 sm:h-32 md:h-36 lg:h-38 w-auto max-w-none object-contain transition-all duration-300 transform group-hover:scale-105 absolute top-1/2 -translate-y-1/2 left-0" src="imagens/Logo.png" onerror="this.src='https://lh3.googleusercontent.com/aida/ADBb0uhmTUFLI4cmZoRMZBduuSkZSEYO9cDd8QQGWanFIwZN2n4isdDNJoHhbitVVaKmnxsls89pS-ey1yRF1ESVXLzFF7zGwR3wlr2l4CH7Fk0a6Bj_sfk822uKiai9oTZTIVLnUfdZ1ezwPoiezmToDceXpg-mH72w_4HZD8hAt7V3ysaNpuDsvZbrQx2XXDQ3loLXwwOuUzn51kfIoWsCrW4aSe2HJY3p-BIhUg_kszkzpvmE3zNs-UHf'"/>
+            </a>
+
+            <!-- Navegação de Voltar -->
+            <div class="flex items-center gap-8 text-sm font-semibold text-black">
+                <a href="index.html" class="hover:text-brand-pink flex items-center gap-1.5 transition-all">
+                    <i data-lucide="arrow-left" class="w-4 h-4 text-black group-hover:text-brand-pink"></i>
+                    <span>Voltar ao Site</span>
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Cartão Contêiner do Formulário Principal -->
+    <main class="flex-grow py-16 px-6 max-w-7xl mx-auto w-full flex items-center justify-center">
+        
+        <div class="w-full max-w-2xl bg-white rounded-3xl p-8 md:p-12 shadow-xl border border-black space-y-8 text-left">
+            
+            <!-- Texto de Cabeçalho do Contexto -->
+            <div class="space-y-3">
+                <span class="text-brand-pink font-bold text-xs uppercase tracking-wider block">Reservas FestaSys</span>
+                <h2 class="font-display text-3xl font-extrabold text-black tracking-tight">
+                    Fale com Nossos Festeiros! 🔮
+                </h2>
+                <p class="text-gray-600 text-xs md:text-sm leading-relaxed">
+                    Preencha os dados abaixo sobre a festinha do seu pequeno para reservarmos as fantasias e kits de decoração temáticos. Suas informações serão integradas no sistema de administração FestaSys dos nossos funcionários para geração do seu contrato!
+                </p>
+            </div>
+
+            <!-- Barra de status de temas pré-selecionados controlada dinamicamente -->
+            <div id="selecao-info-box" class="bg-brand-light border border-black rounded-2xl p-4 flex items-center justify-between text-xs font-semibold text-black" style="display: none;">
+                <div class="flex items-center gap-2">
+                    <i data-lucide="sparkles" class="w-4 h-4 text-brand-pink"></i>
+                    <div>
+                        <strong>Tema Pré-Selecionado:</strong> <span id="selecao-nome" class="text-brand-pink font-bold">Nenhum</span> 
+                        | <strong>Tamanho:</strong> <span id="selecao-tamanho" class="text-black font-bold">Padrão</span>
+                    </div>
+                </div>
+                <button type="button" class="bg-white hover:bg-gray-50 text-black border border-black font-extrabold text-[10px] px-2.5 py-1 rounded-lg transition-all cursor-pointer" id="limpar-selecao-previa-btn">Trocar Tema</button>
+            </div>
+
+            <!-- Seção de Formulário -->
+            <form id="form-contato" class="space-y-6">
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- Entrada do Nome do Cliente -->
+                    <div class="space-y-2">
+                        <label for="nome" class="block text-xs font-bold text-black uppercase tracking-wider">
+                            Nome Completo do Responsável:
+                        </label>
+                        <input 
+                            type="text" 
+                            id="nome" 
+                            placeholder="Digite seu nome completo" 
+                            required 
+                            class="w-full h-11 px-4 border border-black rounded-xl text-xs font-medium text-gray-700 placeholder:text-gray-400 outline-none focus:ring-2 focus:ring-black/10 focus:border-black transition-shadow bg-white"
+                        />
+                    </div>
+
+                    <!-- Entrada de Contato do WhatsApp -->
+                    <div class="space-y-2">
+                        <label for="whatsapp" class="block text-xs font-bold text-black uppercase tracking-wider">
+                            Seu Tel / WhatsApp de Contato:
+                        </label>
+                        <input 
+                            type="tel" 
+                            id="whatsapp" 
+                            placeholder="(11) 99999-9999" 
+                            required 
+                            class="w-full h-11 px-4 border border-black rounded-xl text-xs font-medium text-gray-700 placeholder:text-gray-400 outline-none focus:ring-2 focus:ring-black/10 focus:border-black transition-shadow bg-white"
+                        />
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- Entrada da Data do Evento -->
+                    <div class="space-y-2">
+                        <label for="data-festa" class="block text-xs font-bold text-black uppercase tracking-wider">
+                            Data Desejada da Festa:
+                        </label>
+                        <input 
+                            type="date" 
+                            id="data-festa" 
+                            required 
+                            class="w-full h-11 px-4 border border-black rounded-xl text-xs font-medium text-gray-700 placeholder:text-gray-400 outline-none focus:ring-2 focus:ring-black/10 focus:border-black transition-shadow bg-white"
+                        />
+                    </div>
+
+                    <!-- Entrada do Tipo de Combo (Menu Suspenso) -->
+                    <div class="space-y-2">
+                        <label for="combo" class="block text-xs font-bold text-black uppercase tracking-wider">
+                            Tipo de Combo de Atendimento:
+                        </label>
+                        <select 
+                            id="combo" 
+                            class="w-full h-11 px-4 border border-black rounded-xl text-xs font-medium text-gray-700 outline-none focus:ring-2 focus:ring-black/10 focus:border-black transition-shadow bg-white cursor-pointer"
+                        >
+                            <option value="Combo Completo: Kit Decoração + Fantasia">Combo Completo (Decoração + Fantasia)</option>
+                            <option value="Apenas Aluguel de Fantasias Temáticas">Apenas Aluguel de Fantasias Temáticas</option>
+                            <option value="Apenas Kit de Decoração da Mesa">Apenas Kit de Decoração da Mesa</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Opções de vínculo manual da fantasia (Oculto inicialmente caso tenha sido selecionado via modal) -->
+                <div class="space-y-2 text-left" id="grupo-selecao-fantasia">
+                    <label for="fantasia-vinculo" class="block text-xs font-bold text-black uppercase tracking-wider">
+                        Vincular qual Tema Especial do nosso Acervo?
+                    </label>
+                    <select 
+                        id="fantasia-vinculo" 
+                        class="w-full h-11 px-4 border border-black rounded-xl text-xs font-medium text-gray-700 outline-none focus:ring-2 focus:ring-black/10 focus:border-black transition-shadow bg-white cursor-pointer"
+                    >
+                        <!-- Populada dinamicamente via script.js -->
+                    </select>
+                </div>
+
+                <!-- Área de texto para observações adicionais -->
+                <div class="space-y-2">
+                    <label for="observacao" class="block text-xs font-bold text-black uppercase tracking-wider">
+                        Observações ou Pedidos Especiais (Opcional):
+                    </label>
+                    <textarea 
+                        id="observacao" 
+                        rows="3" 
+                        placeholder="Ex: Preciso de fantasias de tamanhos específicos, balões extras ou painel de mesa grande..." 
+                        class="w-full p-4 border border-black rounded-xl text-xs font-medium text-gray-700 placeholder:text-gray-400 outline-none focus:ring-2 focus:ring-black/10 focus:border-black transition-shadow bg-white resize-y"
+                    ></textarea>
+                </div>
+
+                <!-- Botão de Envio de Formulário -->
+                <button 
+                    type="submit" 
+                    class="w-full bg-white hover:bg-gray-50 transition-all text-black border-2 border-black font-extrabold py-4 rounded-xl hover:shadow-md active:scale-95 text-sm flex items-center justify-center gap-2 cursor-pointer shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:shadow-none"
+                >
+                    <i data-lucide="send" class="w-4 h-4 text-black"></i>
+                    <span>Enviar para o WhatsApp & Confirmar Orçamento</span>
+                </button>
+
+            </form>
+        </div>
+    </main>
+
+    <!-- INÍCIO: Rodapé (Footer) -->
+    <footer class="bg-white border-t border-black pt-16 pb-8" data-purpose="site-footer">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col items-center text-center">
+            
+            <div class="w-full flex items-center justify-center mb-6 px-4">
+                <img alt="Fantasytoca Logo" class="h-28 sm:h-36 md:h-44 lg:h-48 w-auto object-contain transition-all duration-300 transform hover:scale-[1.03]" src="imagens/Logo.png" onerror="this.src='https://lh3.googleusercontent.com/aida/ADBb0uhmTUFLI4cmZoRMZBduuSkZSEYO9cDd8QQGWanFIwZN2n4isdDNJoHhbitVVaKmnxsls89pS-ey1yRF1ESVXLzFF7zGwR3wlr2l4CH7Fk0a6Bj_sfk822uKiai9oTZTIVLnUfdZ1ezwPoiezmToDceXpg-mH72w_4HZD8hAt7V3ysaNpuDsvZbrQx2XXDQ3loLXwwOuUzn51kfIoWsCrW4aSe2HJY3p-BIhUg_kszkzpvmE3zNs-UHf'"/>
+            </div>
+            
+            <div class="flex flex-wrap justify-center gap-6 mb-8 text-sm font-bold text-black">
+                <a class="hover:text-brand-pink transition-colors" href="index.html#sobre">Sobre a Loja</a>
+                <a class="hover:text-brand-pink transition-colors" href="index.html#catalogo-secao">Catálogo</a>
+                <a class="hover:text-brand-pink transition-colors" href="index.html">Página Inicial</a>
+                <a class="hover:text-brand-pink transition-colors" href="index.html#sobre">Políticas de Uso</a>
+            </div>
+            
+            <p class="text-sm text-gray-650 max-w-2xl leading-relaxed font-medium">
+                © 2026 Fantasytoca Aluguel. Projeto Beta 1.0 de controle operacional e de consultas de fantasias de festa de alta fidelidade técnica. Localizada na Rua Alegre, 45 - Bairro Jardim das Flores. Todos os direitos reservados.
+            </p>
+            
+        </div>
+    </footer>
+    <!-- FIM: Rodapé (Footer) -->
+
+    <!-- Integração do Script Principal -->
+    <script src="script.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            lucide.createIcons();
+        });
+    </script>
+</body>
+</html>
